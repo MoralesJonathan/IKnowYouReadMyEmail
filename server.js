@@ -1,6 +1,6 @@
 const express = require('express')
   server = express()
-  port = 8080
+  port = process.env.PORT || 8080
   environment = server.get('env')
   logger = require('morgan')
   fs = require('fs')
