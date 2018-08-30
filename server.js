@@ -5,7 +5,26 @@ const express = require('express')
   path = require("path")
   logger = require('morgan')
   fs = require('fs')
+  nodemailer = require('nodemailer')
   keys = require('./keys.json');
+
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, 
+  auth: {
+      user: keys.email.user, 
+      pass: keys.email.password 
+  }
+});
+
+let mailOptions = {
+  from: '"Email Reader" <reader@no-reply.com>', 
+  to: 'jonathan@everymundo.com',
+  subject: 'Email Read ✔', 
+  text: '',
+  html: ''
+};
 
 server
   .use(express.static('public'))
@@ -13,10 +32,17 @@ server
 
 server
   .get('/image/:emailAccount/:recipient/:subject', (req, res) => {
-    console.log(`Email sent from account: ${req.params.emailAccount} was read by: ${req.params.recipient} for email subject: ${req.params.subject}`)
+    mailOptions.text = `Email sent from account: ${req.params.emailAccount} was read by: ${req.params.recipient} for email subject: ${req.params.subject}`,
+    mailOptions.html = `<p>${mailOptions.text}</p>`
+    transporter.sendMail(mailOptions, (error, info) => {
+      error? console.log(error): console.log('Message sent: %s', info.messageId);
+    });
     res.sendFile('track.jpg', { root: path.join(__dirname, '/public') });
   })
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port} and is running with a ${environment} environment.`);
+  transporter.verify((error, success) => {
+    error? console.log(error): console.log('SMTP connection established. Ready to send emails.');
+ });
 })

@@ -6,7 +6,8 @@
   "repository": "https://github.com/jonmorazav/IKnowYouReadMyEmail",
   "author": "Jonathan Morales <jonmorazav@yahoo.com>",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "nodemailer": "^4.6.8"
   },
   "devDependencies": {
     "morgan": "^1.9.0",
