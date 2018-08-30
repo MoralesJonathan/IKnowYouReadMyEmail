@@ -5,16 +5,15 @@ const express = require('express')
   path = require("path")
   logger = require('morgan')
   fs = require('fs')
-  nodemailer = require('nodemailer')
-  keys = require('./keys.json');
+  nodemailer = require('nodemailer');
 
 let transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 587,
   secure: false, 
   auth: {
-      user: keys.email.user, 
-      pass: keys.email.password 
+      user: process.env.EMAILUSER, 
+      pass: process.env.EMAILPASSWORD
   }
 });
 
