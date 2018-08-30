@@ -1,0 +1,15 @@
+{
+  "name": "IKnowYouReadMyEmail",
+  "version": "0.0.1",
+  "description": "Checking when someone opens my email.",
+  "main": "server.js",
+  "repository": "https://github.com/jonmorazav/IKnowYouReadMyEmail",
+  "author": "Jonathan Morales <jonmorazav@yahoo.com>",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "morgan": "^1.9.0",
+    "nodemon": "^1.18.4"
+  }
+}
