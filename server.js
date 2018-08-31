@@ -36,27 +36,31 @@ server
     recipient = req.params.recipient
     subject = req.params.subject
     id = req.params.id;
-    mongoClient.connect(process.env.MONGODB_URI, function (error, database) {
+    mongoClient.connect(process.env.MONGODB_URI, (error, database) => {
       if (!error) {
         console.log("Connected successfully to MongoDB server");
         let collection = database.db().collection(emailAccount);
         collection.findOne({
           id: id
-        }, function (error, tracker) {
+        }, (error, tracker) => {
           if (tracker !== null) {
-            mailOptions.text = `Email with ID ${tracker.id} sent from account ${emailAccount} was read by: ${tracker.emailRecipient} for email subject: ${tracker.emailSubject}`;
-            mailOptions.html = `<p>${mailOptions.text}</p>`;
-            transporter.sendMail(mailOptions, (error, info) => {
-              error ? console.log(error) : console.log('Message sent: %s', info.messageId);
-            });
-            collection.updateOne({
-              id: id
-            },{ $set: {
-              dateRead: new Date().toISOString(),
-            }},(err,res) => {
-                if(err) console.log(`Error updating date opened to db: ${err}`)
-                database.close();
-            })
+            if (tracker.dateRead.length == '') {
+              mailOptions.text = `Email with ID ${tracker.id} sent from account ${emailAccount} was read by: ${tracker.emailRecipient} for email subject: ${tracker.emailSubject}`;
+              mailOptions.html = `<p>${mailOptions.text}</p>`;
+              transporter.sendMail(mailOptions, (error, info) => {
+                error ? console.log(error) : console.log('Message sent: %s', info.messageId);
+              });
+              collection.updateOne({
+                id: id
+              }, {
+                  $set: {
+                    dateRead: new Date().toISOString(),
+                  }
+                }, (err, res) => {
+                  if (err) console.log(`Error updating date opened to db: ${err}`)
+                  database.close();
+                })
+            }
             res.sendFile('track.jpg', { root: path.join(__dirname, '/public') });
           } else {
             collection.insertOne({
