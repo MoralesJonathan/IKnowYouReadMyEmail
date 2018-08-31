@@ -7,6 +7,7 @@
   "author": "Jonathan Morales <jonmorazav@yahoo.com>",
   "dependencies": {
     "express": "^4.16.3",
+    "mongodb": "^3.1.4",
     "nodemailer": "^4.6.8"
   },
   "devDependencies": {
